@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.8" />
+    <PackageReference Include="HotChocolate.Data" Version="15.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.7" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GraphQLAgentApp.Repository\GraphQLAgentApp.Repository.csproj" />
+    <ProjectReference Include="..\GraphQLAgentApp.Service\GraphQLAgentApp.Service.csproj" />
+    <ProjectReference Include="..\GraphQLAgentApp.Models\GraphQLAgentApp.Models.csproj" />
+    <ProjectReference Include="..\GraphQLAgentApp.Mapper\GraphQLAgentApp.Mapper.csproj" />
+  </ItemGroup>
+
+</Project>

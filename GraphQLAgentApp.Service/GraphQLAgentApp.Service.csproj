@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GraphQLAgentApp.Repository\GraphQLAgentApp.Repository.csproj" />
+    <ProjectReference Include="..\GraphQLAgentApp.Models\GraphQLAgentApp.Models.csproj" />
+    <ProjectReference Include="..\GraphQLAgentApp.Mapper\GraphQLAgentApp.Mapper.csproj" />
+  </ItemGroup>
+
+</Project>
