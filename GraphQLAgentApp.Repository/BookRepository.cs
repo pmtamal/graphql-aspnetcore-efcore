@@ -4,22 +4,38 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GraphQLAgentApp.Repository
 {
-    public class BookRepository : IBookRepository
+    public class BookRepository(AppDbContext context) : IBookRepository
     {
-        private readonly AppDbContext _context;
-
-        public BookRepository(AppDbContext context)
+        public async Task<List<Book>> GetAllAsync() => await context.Books
+            .Include(b => b.Author)
+            .Include(b => b.Category)
+            .ToListAsync();
+            
+        public async Task<Book?> GetByIdAsync(int id) => await context.Books
+            .Include(b => b.Author)
+            .Include(b => b.Category)
+            .FirstOrDefaultAsync(b => b.Id == id);
+            
+        public async Task<Book> AddAsync(string title, int authorId, int categoryId, string isbn, string description, int publicationYear, string publisher, int pages, string language, decimal price, int stockQuantity)
         {
-            _context = context;
-        }
-
-        public async Task<List<Book>> GetAllAsync() => await _context.Books.ToListAsync();
-        public async Task<Book?> GetByIdAsync(int id) => await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
-        public async Task<Book> AddAsync(string title, string author)
-        {
-            var book = new Book { Title = title, Author = author, CreatedAt = DateTime.UtcNow };
-            await _context.Books.AddAsync(book);
-            await _context.SaveChangesAsync();
+            var book = new Book 
+            { 
+                Title = title, 
+                AuthorId = authorId,
+                CategoryId = categoryId,
+                ISBN = isbn,
+                Description = description,
+                PublicationYear = publicationYear,
+                Publisher = publisher,
+                Pages = pages,
+                Language = language,
+                Price = price,
+                StockQuantity = stockQuantity,
+                IsAvailable = true,
+                CreatedAt = DateTime.UtcNow 
+            };
+            await context.Books.AddAsync(book);
+            await context.SaveChangesAsync();
             return book;
         }
     }

@@ -5,34 +5,25 @@ using GraphQLAgentApp.Repository;
 
 namespace GraphQLAgentApp.Service
 {
-    public class BookService : IBookService
+    public class BookService(IBookRepository repository, IMappingService mappingService) : IBookService
     {
-        private readonly IBookRepository _repository;
-        private readonly IMappingService _mappingService;
-
-        public BookService(IBookRepository repository, IMappingService mappingService)
-        {
-            _repository = repository;
-            _mappingService = mappingService;
-        }
-
         public async Task<List<BookDto>> GetAllAsync()
         {
-            var books = await _repository.GetAllAsync();
-            return _mappingService.MapList<Book, BookDto>(books);
+            var books = await repository.GetAllAsync();
+            return mappingService.MapList<Book, BookDto>(books);
         }
 
         public async Task<BookDto?> GetByIdAsync(int id)
         {
-            var book = await _repository.GetByIdAsync(id);
+            var book = await repository.GetByIdAsync(id);
             if (book == null) return null;
-            return _mappingService.Map<Book, BookDto>(book);
+            return mappingService.Map<Book, BookDto>(book);
         }
 
-        public async Task<BookDto> AddAsync(string title, string author)
+        public async Task<BookDto> AddAsync(string title, int authorId, int categoryId, string isbn, string description, int publicationYear, string publisher, int pages, string language, decimal price, int stockQuantity)
         {
-            var book = await _repository.AddAsync(title, author);
-            return _mappingService.Map<Book, BookDto>(book);
+            var book = await repository.AddAsync(title, authorId, categoryId, isbn, description, publicationYear, publisher, pages, language, price, stockQuantity);
+            return mappingService.Map<Book, BookDto>(book);
         }
     }
 }

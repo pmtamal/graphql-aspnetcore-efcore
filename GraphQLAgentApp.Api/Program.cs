@@ -1,4 +1,5 @@
 using GraphQLAgentApp.Api.GraphQL;
+using GraphQLAgentApp.Api.GraphQL.Queries;
 using GraphQLAgentApp.Repository;
 using GraphQLAgentApp.Service;
 using GraphQLAgentApp.Mapper;
@@ -32,15 +33,24 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 builder.Services.AddAutoMapper(typeof(BookMappingProfile).Assembly);
 builder.Services.AddScoped<IMappingService, MappingService>();
 
-// Register repository and service interfaces
+// Register repositories
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+// Register services
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // Add GraphQL services
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
     .AddMutationType<Mutation>()
+    .AddTypeExtension<BookQuery>()
+    .AddTypeExtension<AuthorQuery>()
+    .AddTypeExtension<CategoryQuery>()
     .AddProjections()
     .AddFiltering()
     .AddSorting();

@@ -29,8 +29,49 @@ namespace GraphQLAgentApp.Mapper
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());
 
             // Entity to GraphQL Model mapping (direct mapping when needed)
-            
-                
+            CreateMap<Book, BookGraphQLModel>();
+
+            // Author mappings
+            CreateMap<Author, AuthorDto>();
+            CreateMap<AuthorDto, Author>();
+            CreateMap<AuthorDto, AuthorGraphQLModel>();
+            CreateMap<AuthorGraphQLModel, AuthorDto>();
+            CreateMap<Author, AuthorGraphQLModel>();
+
+            // Category mappings
+            CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
+            CreateMap<CategoryDto, CategoryGraphQLModel>();
+            CreateMap<CategoryGraphQLModel, CategoryDto>();
+            CreateMap<Category, CategoryGraphQLModel>();
+
+            // Customer mappings
+            CreateMap<Customer, CustomerDto>();
+            CreateMap<CustomerDto, Customer>();
+            CreateMap<CustomerDto, CustomerGraphQLModel>();
+            CreateMap<CustomerGraphQLModel, CustomerDto>();
+            CreateMap<Customer, CustomerGraphQLModel>();
+
+            // Order mappings
+            CreateMap<Order, OrderDto>();
+            CreateMap<OrderDto, Order>();
+            CreateMap<OrderDto, OrderGraphQLModel>();
+            CreateMap<OrderGraphQLModel, OrderDto>();
+            CreateMap<Order, OrderGraphQLModel>();
+
+            // OrderItem mappings
+            CreateMap<OrderItem, OrderItemDto>();
+            CreateMap<OrderItemDto, OrderItem>();
+            CreateMap<OrderItemDto, OrderItemGraphQLModel>();
+            CreateMap<OrderItemGraphQLModel, OrderItemDto>();
+            CreateMap<OrderItem, OrderItemGraphQLModel>();
+
+            // Review mappings
+            CreateMap<Review, ReviewDto>();
+            CreateMap<ReviewDto, Review>();
+            CreateMap<ReviewDto, ReviewGraphQLModel>();
+            CreateMap<ReviewGraphQLModel, ReviewDto>();
+            CreateMap<Review, ReviewGraphQLModel>();
 
             // IQueryable mapping configurations for projections
             CreateMap<IQueryable<Book>, IQueryable<BookDto>>();
@@ -38,38 +79,29 @@ namespace GraphQLAgentApp.Mapper
         }
     }
 
-
-
     /// <summary>
     /// Implementation of mapping service using AutoMapper
     /// </summary>
-    public class MappingService : IMappingService
+    public class MappingService(IMapper mapper) : IMappingService
     {
-        private readonly IMapper _mapper;
-
-        public MappingService(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
-
         public TDestination Map<TSource, TDestination>(TSource source)
         {
-            return _mapper.Map<TSource, TDestination>(source);
+            return mapper.Map<TSource, TDestination>(source);
         }
 
         public TDestination Map<TDestination>(object source)
         {
-            return _mapper.Map<TDestination>(source);
+            return mapper.Map<TDestination>(source);
         }
 
         public IQueryable<TDestination> ProjectTo<TDestination>(IQueryable source)
         {
-            return _mapper.ProjectTo<TDestination>(source);
+            return mapper.ProjectTo<TDestination>(source);
         }
 
         public List<TDestination> MapList<TSource, TDestination>(IEnumerable<TSource> source)
         {
-            return _mapper.Map<List<TDestination>>(source);
+            return mapper.Map<List<TDestination>>(source);
         }
     }
 }

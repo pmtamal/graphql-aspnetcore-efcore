@@ -7,6 +7,6 @@ namespace GraphQLAgentApp.Repository
     {
         Task<List<Book>> GetAllAsync();
         Task<Book?> GetByIdAsync(int id);
-        Task<Book> AddAsync(string title, string author);
+        Task<Book> AddAsync(string title, int authorId, int categoryId, string isbn, string description, int publicationYear, string publisher, int pages, string language, decimal price, int stockQuantity);
     }
 }
