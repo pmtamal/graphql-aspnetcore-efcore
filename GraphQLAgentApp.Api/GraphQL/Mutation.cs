@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using GraphQLAgentApp.Service;
 using GraphQLAgentApp.Models.GraphQL;
 using GraphQLAgentApp.Mapper;

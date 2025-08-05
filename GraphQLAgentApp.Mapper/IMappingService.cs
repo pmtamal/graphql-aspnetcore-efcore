@@ -1,5 +1,3 @@
-using AutoMapper;
-
 namespace GraphQLAgentApp.Mapper
 {
     /// <summary>

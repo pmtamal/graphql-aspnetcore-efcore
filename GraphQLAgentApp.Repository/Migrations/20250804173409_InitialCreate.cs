@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
 #nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
@@ -42,7 +44,6 @@ namespace GraphQLAgentApp.Repository.Migrations
                     { 6, "Martin Fowler", new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Patterns of Enterprise Application Architecture", null },
                     { 7, "Michael Feathers", new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Working Effectively with Legacy Code", null },
                     { 8, "Robert C. Martin", new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "The Clean Coder", null },
-                    { 9, "Jez Humble", new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Continuous Delivery", null },
                     { 10, "Kyle Simpson", new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "You Don't Know JS", null }
                 });
         }

@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Run GraphQLAgentApp.Api",
+			"command": "dotnet run --project GraphQLAgentApp.Api/GraphQLAgentApp.Api.csproj",
+			"group": "build",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		}
+	]
+}

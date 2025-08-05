@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using GraphQLAgentApp.Mapper;
 using GraphQLAgentApp.Models.Dtos;
 using GraphQLAgentApp.Models.Entities;

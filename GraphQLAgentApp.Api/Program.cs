@@ -3,7 +3,6 @@ using GraphQLAgentApp.Repository;
 using GraphQLAgentApp.Service;
 using GraphQLAgentApp.Mapper;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
