@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GraphQLAgentApp.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace GraphQLAgentApp.Repository
 {
@@ -12,13 +15,13 @@ namespace GraphQLAgentApp.Repository
             _context = context;
         }
 
-        public IQueryable<Book> GetAll() => _context.Books;
-        public Book? GetById(int id) => _context.Books.FirstOrDefault(b => b.Id == id);
-        public Book Add(string title, string author)
+        public async Task<List<Book>> GetAllAsync() => await _context.Books.ToListAsync();
+        public async Task<Book?> GetByIdAsync(int id) => await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
+        public async Task<Book> AddAsync(string title, string author)
         {
             var book = new Book { Title = title, Author = author, CreatedAt = DateTime.UtcNow };
-            _context.Books.Add(book);
-            _context.SaveChanges();
+            await _context.Books.AddAsync(book);
+            await _context.SaveChangesAsync();
             return book;
         }
     }

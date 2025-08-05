@@ -1,7 +1,9 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using GraphQLAgentApp.Mapper;
 using GraphQLAgentApp.Models.Dtos;
 using GraphQLAgentApp.Models.Entities;
 using GraphQLAgentApp.Repository;
-using GraphQLAgentApp.Mapper;
 
 namespace GraphQLAgentApp.Service
 {
@@ -16,22 +18,22 @@ namespace GraphQLAgentApp.Service
             _mappingService = mappingService;
         }
 
-        public IQueryable<BookDto> GetAll()
+        public async Task<List<BookDto>> GetAllAsync()
         {
-            return _mappingService.ProjectTo<BookDto>(_repository.GetAll());
+            var books = await _repository.GetAllAsync();
+            return _mappingService.MapList<Book, BookDto>(books);
         }
 
-        public BookDto? GetById(int id)
+        public async Task<BookDto?> GetByIdAsync(int id)
         {
-            var book = _repository.GetById(id);
+            var book = await _repository.GetByIdAsync(id);
             if (book == null) return null;
-            
             return _mappingService.Map<Book, BookDto>(book);
         }
 
-        public BookDto Add(string title, string author)
+        public async Task<BookDto> AddAsync(string title, string author)
         {
-            var book = _repository.Add(title, author);
+            var book = await _repository.AddAsync(title, author);
             return _mappingService.Map<Book, BookDto>(book);
         }
     }

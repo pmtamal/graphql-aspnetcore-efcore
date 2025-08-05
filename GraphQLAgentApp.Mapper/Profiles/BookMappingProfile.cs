@@ -29,7 +29,8 @@ namespace GraphQLAgentApp.Mapper
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());
 
             // Entity to GraphQL Model mapping (direct mapping when needed)
-            CreateMap<Book, BookGraphQLModel>();
+            
+                
 
             // IQueryable mapping configurations for projections
             CreateMap<IQueryable<Book>, IQueryable<BookDto>>();

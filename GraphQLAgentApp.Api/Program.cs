@@ -3,8 +3,17 @@ using GraphQLAgentApp.Repository;
 using GraphQLAgentApp.Service;
 using GraphQLAgentApp.Mapper;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Use ContentRootPath to get the project directory (better approach)
+var appDataPath = System.IO.Path.Combine(builder.Environment.ContentRootPath, "App_Data");
+if (!Directory.Exists(appDataPath))
+{
+    Directory.CreateDirectory(appDataPath);
+}
+AppDomain.CurrentDomain.SetData("DataDirectory", appDataPath);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -16,14 +25,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
     options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-    options.UseLoggerFactory(loggerFactory);
     options.EnableSensitiveDataLogging();
 });
 
 // Register AutoMapper
-builder.Services.AddAutoMapper(typeof(BookMappingProfile));
+builder.Services.AddAutoMapper(typeof(BookMappingProfile).Assembly);
 builder.Services.AddScoped<IMappingService, MappingService>();
 
 // Register repository and service interfaces
@@ -71,13 +78,13 @@ app.MapGet("/weatherforecast", () =>
         .ToArray();
     return forecast;
 })
-.WithName("GetWeatherForecast");
+.WithName("GetWeatherForecast");        
 
 // Ensure database is created
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
+    await db.Database.MigrateAsync();
 }
 
 app.Run();

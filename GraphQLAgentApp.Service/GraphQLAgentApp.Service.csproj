@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GraphQLAgentApp.Repository\GraphQLAgentApp.Repository.csproj" />
     <ProjectReference Include="..\GraphQLAgentApp.Models\GraphQLAgentApp.Models.csproj" />
     <ProjectReference Include="..\GraphQLAgentApp.Mapper\GraphQLAgentApp.Mapper.csproj" />

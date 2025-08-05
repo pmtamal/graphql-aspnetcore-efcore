@@ -1,11 +1,13 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using GraphQLAgentApp.Models.Dtos;
 
 namespace GraphQLAgentApp.Service
 {
     public interface IBookService
     {
-        IQueryable<BookDto> GetAll();
-        BookDto? GetById(int id);
-        BookDto Add(string title, string author);
+        Task<List<BookDto>> GetAllAsync();
+        Task<BookDto?> GetByIdAsync(int id);
+        Task<BookDto> AddAsync(string title, string author);
     }
 }

@@ -1,15 +1,15 @@
+using System.Threading.Tasks;
 using GraphQLAgentApp.Service;
 using GraphQLAgentApp.Models.GraphQL;
 using GraphQLAgentApp.Mapper;
-using HotChocolate;
 
 namespace GraphQLAgentApp.Api.GraphQL
 {
-    public class Mutation
+    public class Mutation(IBookService service, IMappingService mappingService)
     {
-        public BookGraphQLModel AddBook(string title, string author, [Service] IBookService service, [Service] IMappingService mappingService)
+        public async Task<BookGraphQLModel> AddBook(string title, string author)
         {
-            var bookDto = service.Add(title, author);
+            var bookDto = await service.AddAsync(title, author);
             return mappingService.Map<BookGraphQLModel>(bookDto);
         }
     }

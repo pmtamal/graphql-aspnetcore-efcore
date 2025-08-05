@@ -1,26 +1,36 @@
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using GraphQLAgentApp.Service;
 using GraphQLAgentApp.Models.GraphQL;
 using GraphQLAgentApp.Mapper;
-using HotChocolate;
-using HotChocolate.Data;
+using GraphQLAgentApp.Models.Dtos;
 
 namespace GraphQLAgentApp.Api.GraphQL
 {
     public class Query
     {
+        private readonly IBookService _service;
+        private readonly IMappingService _mappingService;
+
+        public Query(IBookService service, IMappingService mappingService)
+        {
+            _service = service;
+            _mappingService = mappingService;
+        }
+
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public IQueryable<BookGraphQLModel> GetBooks([Service] IBookService service, [Service] IMappingService mappingService)
+        public async Task<List<BookGraphQLModel>> GetBooks()
         {
-            return mappingService.ProjectTo<BookGraphQLModel>(service.GetAll());
+            var bookDtos = await _service.GetAllAsync();
+            return _mappingService.MapList<BookDto, BookGraphQLModel>(bookDtos);
         }
 
-        public BookGraphQLModel? GetBookById(int id, [Service] IBookService service, [Service] IMappingService mappingService)
+        public async Task<BookGraphQLModel?> GetBookById(int id)
         {
-            var bookDto = service.GetById(id);
-            return bookDto == null ? null : mappingService.Map<BookGraphQLModel>(bookDto);
+            var bookDto = await _service.GetByIdAsync(id);
+            return bookDto == null ? null : _mappingService.Map<BookGraphQLModel>(bookDto);
         }
     }
 }

@@ -1,4 +1,5 @@
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using GraphQLAgentApp.Models.Entities;
 
 
@@ -6,8 +7,8 @@ namespace GraphQLAgentApp.Repository
 {
     public interface IBookRepository
     {
-        IQueryable<Book> GetAll();
-        Book? GetById(int id);
-        Book Add(string title, string author);
+        Task<List<Book>> GetAllAsync();
+        Task<Book?> GetByIdAsync(int id);
+        Task<Book> AddAsync(string title, string author);
     }
 }
