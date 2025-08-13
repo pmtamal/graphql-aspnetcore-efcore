@@ -17,8 +17,8 @@ namespace GraphQLAgentApp.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
-            // Apply configurations
+
+            //Apply configurations
             modelBuilder.ApplyConfiguration(new BookEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new AuthorEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryEntityTypeConfiguration());

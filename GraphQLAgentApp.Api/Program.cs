@@ -29,6 +29,8 @@ builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
     options.EnableSensitiveDataLogging();
 });
 
+builder.Services.AddScoped<AppDbContext>();
+
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(BookMappingProfile).Assembly);
 builder.Services.AddScoped<IMappingService, MappingService>();
@@ -43,6 +45,8 @@ builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+// GraphQL query classes are automatically resolved by HotChocolate
+
 // Add GraphQL services
 builder.Services
     .AddGraphQLServer()
@@ -53,7 +57,8 @@ builder.Services
     .AddTypeExtension<CategoryQuery>()
     .AddProjections()
     .AddFiltering()
-    .AddSorting();
+    .AddSorting()
+    .AddInMemorySubscriptions();
 
 var app = builder.Build();
 
@@ -89,12 +94,18 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");        
 
-// Ensure database is created
+//Ensure database is created and seeded
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await db.Database.MigrateAsync();
+   var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+   await db.Database.MigrateAsync();   
+   // Seed data if database is empty
+    
 }
+
+// Ensure database is created and seeded
+
+
 
 app.Run();
 

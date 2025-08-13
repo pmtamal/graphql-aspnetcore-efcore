@@ -1,6 +1,6 @@
 HTTP/1.1 400 Bad Request
 Content-Type: application/graphql-response+json; charset=utf-8
-Date: Wed, 13 Aug 2025 08:41:30 GMT
+Date: Wed, 13 Aug 2025 11:50:41 GMT
 Server: Kestrel
 Transfer-Encoding: chunked
 

@@ -9,8 +9,15 @@ namespace GraphQLAgentApp.Api.GraphQL.Queries
     /// GraphQL extension for Category operations
     /// </summary>
     [ExtendObjectType(typeof(Query))]
-    public class CategoryQuery(ICategoryService service, IMappingService mappingService)
+    public class CategoryQuery
     {
+        private readonly IMappingService _mappingService;
+
+        public CategoryQuery(IMappingService mappingService)
+        {
+            _mappingService = mappingService;
+        }
+
         /// <summary>
         /// Gets all categories with support for projection, filtering, and sorting.
         /// </summary>
@@ -18,10 +25,10 @@ namespace GraphQLAgentApp.Api.GraphQL.Queries
         [UseProjection]
         [UseFiltering]
         [UseSorting]
-        public async Task<List<CategoryGraphQLModel>> GetCategories()
+        public async Task<List<CategoryGraphQLModel>> Categories([Service] ICategoryService service)
         {
             var categoryDtos = await service.GetAllAsync();
-            return mappingService.MapList<CategoryDto, CategoryGraphQLModel>(categoryDtos);
+            return _mappingService.MapList<CategoryDto, CategoryGraphQLModel>(categoryDtos);
         }
 
         /// <summary>
@@ -29,21 +36,21 @@ namespace GraphQLAgentApp.Api.GraphQL.Queries
         /// </summary>
         /// <param name="id">Category ID</param>
         /// <returns>CategoryGraphQLModel or null if not found</returns>
-        public async Task<CategoryGraphQLModel?> GetCategoryById(int id)
+        public async Task<CategoryGraphQLModel?> CategoryById([Service] ICategoryService service, int id)
         {
             var categoryDto = await service.GetByIdAsync(id);
-            return categoryDto == null ? null : mappingService.Map<CategoryGraphQLModel>(categoryDto);
+            return categoryDto == null ? null : _mappingService.Map<CategoryGraphQLModel>(categoryDto);
         }
 
         /// <summary>
         /// Gets categories with books
         /// </summary>
         /// <returns>List of categories that have books</returns>
-        public async Task<List<CategoryGraphQLModel>> GetCategoriesWithBooks()
+        public async Task<List<CategoryGraphQLModel>> CategoriesWithBooks([Service] ICategoryService service)
         {
             var categoryDtos = await service.GetAllAsync();
             var categoriesWithBooks = categoryDtos.Where(c => c.Books?.Any() == true).ToList();
-            return mappingService.MapList<CategoryDto, CategoryGraphQLModel>(categoriesWithBooks);
+            return _mappingService.MapList<CategoryDto, CategoryGraphQLModel>(categoriesWithBooks);
         }
     }
 } 
