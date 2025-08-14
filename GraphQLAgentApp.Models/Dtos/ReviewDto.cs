@@ -7,13 +7,13 @@ namespace GraphQLAgentApp.Models.Dtos
     {
         public int Id { get; set; }
         public int BookId { get; set; }
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
         public int Rating { get; set; }
         public string? Comment { get; set; }
         public DateTime? CreatedAt { get; set; }
         
         // Navigation properties
         public BookDto? Book { get; set; }
-        public CustomerDto? Customer { get; set; }
+        public UserDto? User { get; set; }
     }
 } 

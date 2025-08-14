@@ -7,13 +7,13 @@ namespace GraphQLAgentApp.Models.GraphQL
     {
         public int Id { get; set; }
         public int BookId { get; set; }
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
         public int Rating { get; set; }
         public string? Comment { get; set; }
         
         // Navigation properties
         public BookGraphQLModel? Book { get; set; }
-        public CustomerGraphQLModel? Customer { get; set; }
+        public UserGraphQLModel? User { get; set; }
         
         // GraphQL-specific computed properties
         public string StarRating => new string('★', Rating) + new string('☆', 5 - Rating);

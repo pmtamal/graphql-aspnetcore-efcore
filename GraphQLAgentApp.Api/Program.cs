@@ -35,15 +35,18 @@ builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddAutoMapper(typeof(BookMappingProfile).Assembly);
 builder.Services.AddScoped<IMappingService, MappingService>();
 
-// Register repositories
-builder.Services.AddScoped<IBookRepository, BookRepository>();
-builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
-// Register services
-builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<IAuthorService, AuthorService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
+        // Register repositories
+        builder.Services.AddScoped<IBookRepository, BookRepository>();
+        builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+        
+        // Register services
+        builder.Services.AddScoped<IBookService, BookService>();
+        builder.Services.AddScoped<IAuthorService, AuthorService>();
+        builder.Services.AddScoped<ICategoryService, CategoryService>();
+        builder.Services.AddScoped<IUserService, UserService>();
 
 // GraphQL query classes are automatically resolved by HotChocolate
 
@@ -94,13 +97,136 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");        
 
-//Ensure database is created and seeded
+// Ensure database is created and seeded
 using (var scope = app.Services.CreateScope())
 {
-   var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-   await db.Database.MigrateAsync();   
-   // Seed data if database is empty
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
     
+    // Seed data if database is empty
+    if (!db.Authors.Any())
+    {
+        try
+        {
+            var author1 = new GraphQLAgentApp.Models.Entities.Author
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Nationality = "American",
+                DateOfBirth = new DateTime(1980, 1, 1),
+                Biography = "A prolific author"
+            };
+            var author2 = new GraphQLAgentApp.Models.Entities.Author
+            {
+                FirstName = "Jane",
+                LastName = "Smith",
+                Nationality = "British",
+                DateOfBirth = new DateTime(1985, 5, 15),
+                Biography = "Award-winning novelist"
+            };
+            
+            db.Authors.AddRange(author1, author2);
+            await db.SaveChangesAsync();
+            
+            var category1 = new GraphQLAgentApp.Models.Entities.Category
+            {
+                Name = "Fiction",
+                Description = "Fictional literature"
+            };
+            var category2 = new GraphQLAgentApp.Models.Entities.Category
+            {
+                Name = "Non-Fiction",
+                Description = "Non-fictional literature"
+            };
+            
+            db.Categories.AddRange(category1, category2);
+            await db.SaveChangesAsync();
+            
+            var book1 = new GraphQLAgentApp.Models.Entities.Book
+            {
+                Title = "The Great Adventure",
+                AuthorId = author1.Id,
+                CategoryId = category1.Id,
+                ISBN = "978-1234567890",
+                Description = "An exciting adventure story",
+                PublicationYear = 2020,
+                Publisher = "Adventure Press",
+                Pages = 300,
+                Language = "English",
+                Price = 19.99m,
+                StockQuantity = 10,
+                IsAvailable = true
+            };
+            var book2 = new GraphQLAgentApp.Models.Entities.Book
+            {
+                Title = "Science Today",
+                AuthorId = author2.Id,
+                CategoryId = category2.Id,
+                ISBN = "978-0987654321",
+                Description = "A comprehensive guide to modern science",
+                PublicationYear = 2021,
+                Publisher = "Science Books",
+                Pages = 450,
+                Language = "English",
+                Price = 29.99m,
+                StockQuantity = 5,
+                IsAvailable = true
+            };
+            
+            db.Books.AddRange(book1, book2);
+            await db.SaveChangesAsync();
+            
+            Console.WriteLine("Database seeded successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error seeding database: {ex.Message}");
+        }
+    }
+    
+    // Ensure admin user exists
+    if (!db.Users.Any(u => u.Username == "admin"))
+    {
+        try
+        {
+            var adminUser = new GraphQLAgentApp.Models.Entities.User
+            {
+                Username = "admin",
+                Email = "admin@bookstore.com",
+                PasswordHash = "jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=", // "admin123" hashed with SHA256
+                IsAdmin = true,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+            
+            db.Users.Add(adminUser);
+            await db.SaveChangesAsync();
+            
+            // Create admin profile
+            var adminProfile = new GraphQLAgentApp.Models.Entities.UserProfile
+            {
+                UserId = adminUser.Id,
+                FirstName = "Admin",
+                LastName = "User",
+                Phone = "+1-555-0123",
+                Address = "123 Admin Street",
+                City = "Admin City",
+                State = "AS",
+                PostalCode = "12345",
+                Country = "United States",
+                CreatedAt = DateTime.UtcNow
+            };
+            
+            db.UserProfiles.Add(adminProfile);
+            await db.SaveChangesAsync();
+            
+            Console.WriteLine("Admin user created successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating admin user: {ex.Message}");
+        }
+    }
 }
 
 // Ensure database is created and seeded

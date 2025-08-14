@@ -7,7 +7,7 @@ namespace GraphQLAgentApp.Models.Entities
     {
         public int Id { get; set; }
         public int BookId { get; set; }
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
         public int Rating { get; set; } // 1-5 stars
         public string? Comment { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -15,6 +15,6 @@ namespace GraphQLAgentApp.Models.Entities
 
         // Navigation properties
         public virtual Book Book { get; set; } = null!;
-        public virtual Customer Customer { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
     }
 } 

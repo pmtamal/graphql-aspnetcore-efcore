@@ -6,7 +6,7 @@ namespace GraphQLAgentApp.Models.GraphQL
     public class OrderGraphQLModel
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = string.Empty;
@@ -15,7 +15,7 @@ namespace GraphQLAgentApp.Models.GraphQL
         public string? Notes { get; set; }
         
         // Navigation properties
-        public CustomerGraphQLModel? Customer { get; set; }
+        public UserGraphQLModel? User { get; set; }
         public List<OrderItemGraphQLModel> OrderItems { get; set; } = new List<OrderItemGraphQLModel>();
         
         // GraphQL-specific computed properties

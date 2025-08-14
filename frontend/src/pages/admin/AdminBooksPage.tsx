@@ -256,9 +256,9 @@ export function AdminBooksPage() {
           )}
           {error && <Alert severity="error">{error.message}</Alert>}
           
-          {data?.getBooks && (
+          {data?.books && (
             <List sx={{ p: 0, maxWidth: '100%' }}>
-              {data.getBooks.map((book: any, index: number) => (
+              {data.books.map((book: any, index: number) => (
                 <Box key={book.id}>
                   <ListItem sx={{ px: { xs: 0, sm: 1 } }}>
                     <ListItemText
@@ -292,7 +292,7 @@ export function AdminBooksPage() {
                       }
                     />
                   </ListItem>
-                  {index < data.getBooks.length - 1 && <Divider />}
+                  {index < data.books.length - 1 && <Divider />}
                 </Box>
               ))}
             </List>

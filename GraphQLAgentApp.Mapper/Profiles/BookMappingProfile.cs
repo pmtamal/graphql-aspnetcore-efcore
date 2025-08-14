@@ -45,12 +45,19 @@ namespace GraphQLAgentApp.Mapper
             CreateMap<CategoryGraphQLModel, CategoryDto>();
             CreateMap<Category, CategoryGraphQLModel>();
 
-            // Customer mappings
-            CreateMap<Customer, CustomerDto>();
-            CreateMap<CustomerDto, Customer>();
-            CreateMap<CustomerDto, CustomerGraphQLModel>();
-            CreateMap<CustomerGraphQLModel, CustomerDto>();
-            CreateMap<Customer, CustomerGraphQLModel>();
+            // User mappings
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
+            CreateMap<UserDto, UserGraphQLModel>();
+            CreateMap<UserGraphQLModel, UserDto>();
+            CreateMap<User, UserGraphQLModel>();
+
+            // UserProfile mappings
+            CreateMap<UserProfile, UserProfileDto>();
+            CreateMap<UserProfileDto, UserProfile>();
+            CreateMap<UserProfileDto, UserProfileGraphQLModel>();
+            CreateMap<UserProfileGraphQLModel, UserProfileDto>();
+            CreateMap<UserProfile, UserProfileGraphQLModel>();
 
             // Order mappings
             CreateMap<Order, OrderDto>();

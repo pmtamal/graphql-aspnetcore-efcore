@@ -4,6 +4,7 @@ using GraphQLAgentApp.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GraphQLAgentApp.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250814080129_AddUserEntity")]
+    partial class AddUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -463,6 +466,135 @@ namespace GraphQLAgentApp.Repository.Migrations
                         });
                 });
 
+            modelBuilder.Entity("GraphQLAgentApp.Models.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "123 Main St",
+                            City = "New York",
+                            Country = "USA",
+                            CreatedAt = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateTime(1985, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "john.doe@email.com",
+                            FirstName = "John",
+                            LastName = "Doe",
+                            Phone = "+1-555-0101",
+                            PostalCode = "10001",
+                            State = "NY"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "456 Oak Ave",
+                            City = "Los Angeles",
+                            Country = "USA",
+                            CreatedAt = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateTime(1990, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "jane.smith@email.com",
+                            FirstName = "Jane",
+                            LastName = "Smith",
+                            Phone = "+1-555-0102",
+                            PostalCode = "90210",
+                            State = "CA"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "789 Pine Rd",
+                            City = "Chicago",
+                            Country = "USA",
+                            CreatedAt = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateTime(1982, 12, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "bob.johnson@email.com",
+                            FirstName = "Bob",
+                            LastName = "Johnson",
+                            Phone = "+1-555-0103",
+                            PostalCode = "60601",
+                            State = "IL"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "321 Elm St",
+                            City = "Houston",
+                            Country = "USA",
+                            CreatedAt = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateTime(1988, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "alice.brown@email.com",
+                            FirstName = "Alice",
+                            LastName = "Brown",
+                            Phone = "+1-555-0104",
+                            PostalCode = "77001",
+                            State = "TX"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Address = "654 Maple Dr",
+                            City = "Phoenix",
+                            Country = "USA",
+                            CreatedAt = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfBirth = new DateTime(1995, 11, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "charlie.wilson@email.com",
+                            FirstName = "Charlie",
+                            LastName = "Wilson",
+                            Phone = "+1-555-0105",
+                            PostalCode = "85001",
+                            State = "AZ"
+                        });
+                });
+
             modelBuilder.Entity("GraphQLAgentApp.Models.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -476,6 +608,9 @@ namespace GraphQLAgentApp.Repository.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
@@ -496,10 +631,12 @@ namespace GraphQLAgentApp.Repository.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("UserId");
 
@@ -558,18 +695,23 @@ namespace GraphQLAgentApp.Repository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("UserId");
 
@@ -594,6 +736,11 @@ namespace GraphQLAgentApp.Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -606,6 +753,11 @@ namespace GraphQLAgentApp.Repository.Migrations
 
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -626,94 +778,6 @@ namespace GraphQLAgentApp.Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("GraphQLAgentApp.Models.Entities.UserProfile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Bio")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Country")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Gender")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("LinkedIn")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("PostalCode")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("ProfilePicture")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("State")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Twitter")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Website")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("GraphQLAgentApp.Models.Entities.Book", b =>
@@ -737,13 +801,17 @@ namespace GraphQLAgentApp.Repository.Migrations
 
             modelBuilder.Entity("GraphQLAgentApp.Models.Entities.Order", b =>
                 {
-                    b.HasOne("GraphQLAgentApp.Models.Entities.User", "User")
+                    b.HasOne("GraphQLAgentApp.Models.Entities.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("GraphQLAgentApp.Models.Entities.User", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("GraphQLAgentApp.Models.Entities.OrderItem", b =>
@@ -773,26 +841,19 @@ namespace GraphQLAgentApp.Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GraphQLAgentApp.Models.Entities.User", "User")
+                    b.HasOne("GraphQLAgentApp.Models.Entities.Customer", "Customer")
                         .WithMany("Reviews")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("GraphQLAgentApp.Models.Entities.User", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Book");
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GraphQLAgentApp.Models.Entities.UserProfile", b =>
-                {
-                    b.HasOne("GraphQLAgentApp.Models.Entities.User", "User")
-                        .WithOne("Profile")
-                        .HasForeignKey("GraphQLAgentApp.Models.Entities.UserProfile", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("GraphQLAgentApp.Models.Entities.Author", b =>
@@ -812,6 +873,13 @@ namespace GraphQLAgentApp.Repository.Migrations
                     b.Navigation("Books");
                 });
 
+            modelBuilder.Entity("GraphQLAgentApp.Models.Entities.Customer", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("Reviews");
+                });
+
             modelBuilder.Entity("GraphQLAgentApp.Models.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
@@ -820,8 +888,6 @@ namespace GraphQLAgentApp.Repository.Migrations
             modelBuilder.Entity("GraphQLAgentApp.Models.Entities.User", b =>
                 {
                     b.Navigation("Orders");
-
-                    b.Navigation("Profile");
 
                     b.Navigation("Reviews");
                 });
