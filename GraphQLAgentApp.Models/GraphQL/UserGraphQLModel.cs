@@ -11,11 +11,12 @@ namespace GraphQLAgentApp.Models.GraphQL
         // Timestamps
         public DateTime CreatedAt { get; set; }
         public DateTime? LastLoginAt { get; set; }
+        public DateTime? LastLogoutAt { get; set; }
         
         // Navigation properties
         public UserProfileGraphQLModel? Profile { get; set; }
-        public List<OrderGraphQLModel> Orders { get; set; } = new List<OrderGraphQLModel>();
-        public List<ReviewGraphQLModel> Reviews { get; set; } = new List<ReviewGraphQLModel>();
+        public List<OrderGraphQLModel> Orders { get; set; } = new();
+        public List<ReviewGraphQLModel> Reviews { get; set; } = new();
         
         // GraphQL-specific computed properties
         public string DisplayName => Profile?.DisplayName ?? Username;

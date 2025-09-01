@@ -110,6 +110,7 @@ namespace GraphQLAgentApp.Repository
                     IsActive = u.IsActive,
                     CreatedAt = u.CreatedAt,
                     LastLoginAt = u.LastLoginAt,
+                    PasswordHash = u.PasswordHash,
                     Profile = u.Profile != null ? new UserProfileDto
                     {
                         Id = u.Profile.Id,

@@ -9,9 +9,11 @@ import {
   ListItem,
   ListItemText,
   Divider,
-  Avatar
+  Avatar,
+  Button
 } from '@mui/material'
-import { Person } from '@mui/icons-material'
+import { Person, ArrowBack } from '@mui/icons-material'
+import { Link } from 'react-router-dom'
 
 const GET_AUTHORS = gql`
   query GetAuthors {
@@ -24,9 +26,19 @@ export function AdminAuthorsPage() {
   
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Manage Authors
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+        <Typography variant="h4" component="h1">
+          Manage Authors
+        </Typography>
+        <Button
+          component={Link}
+          to="/admin"
+          variant="outlined"
+          startIcon={<ArrowBack />}
+        >
+          Back to Dashboard
+        </Button>
+      </Box>
       
       <Paper sx={{ p: 3 }}>
         <Typography variant="h6" gutterBottom>

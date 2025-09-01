@@ -15,5 +15,6 @@ namespace GraphQLAgentApp.Service
         Task<bool> IsAdminAsync(int userId);
         Task<bool> ValidateCredentialsAsync(string username, string password);
         Task<UserDto?> AuthenticateAsync(string username, string password);
+        Task<bool> LogoutAsync(int userId);
     }
 }

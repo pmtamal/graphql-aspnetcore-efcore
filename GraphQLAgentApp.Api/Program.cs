@@ -58,6 +58,8 @@ builder.Services
     .AddTypeExtension<BookQuery>()
     .AddTypeExtension<AuthorQuery>()
     .AddTypeExtension<CategoryQuery>()
+    .AddTypeExtension<UserQuery>()
+    .AddTypeExtension<AccountQuery>()
     .AddProjections()
     .AddFiltering()
     .AddSorting()
@@ -193,7 +195,7 @@ using (var scope = app.Services.CreateScope())
             {
                 Username = "admin",
                 Email = "admin@bookstore.com",
-                PasswordHash = "jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=", // "admin123" hashed with SHA256
+                PasswordHash = "JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk=", // "admin123" hashed with SHA256
                 IsAdmin = true,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow

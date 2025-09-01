@@ -16,6 +16,8 @@ import {
   useMediaQuery
 } from '@mui/material'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowBack } from '@mui/icons-material'
 
 const GET_BOOKS = gql`
   query GetBooks {
@@ -99,14 +101,24 @@ export function AdminBooksPage() {
 
   return (
     <Box sx={{ maxWidth: '100%' }}>
-      <Typography 
-        variant={isMobile ? "h5" : "h4"} 
-        component="h1" 
-        gutterBottom
-        sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}
-      >
-        Manage Books
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+        <Typography 
+          variant={isMobile ? "h5" : "h4"} 
+          component="h1" 
+          sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }}
+        >
+          Manage Books
+        </Typography>
+        <Button
+          component={Link}
+          to="/admin"
+          variant="outlined"
+          startIcon={<ArrowBack />}
+          size={isMobile ? "small" : "medium"}
+        >
+          Back to Dashboard
+        </Button>
+      </Box>
       
       <Box sx={{ 
         display: 'grid', 

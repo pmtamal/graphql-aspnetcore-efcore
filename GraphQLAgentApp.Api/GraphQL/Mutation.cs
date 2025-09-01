@@ -1,12 +1,15 @@
 using GraphQLAgentApp.Service;
 using GraphQLAgentApp.Models.GraphQL;
 using GraphQLAgentApp.Mapper;
+using GraphQLAgentApp.Repository;
+using HotChocolate;
 
 namespace GraphQLAgentApp.Api.GraphQL
 {
-    public class Mutation(IBookService service, IMappingService mappingService, IUserService userService)
+    public class Mutation(IMappingService mappingService)
     {
         public async Task<BookGraphQLModel> AddBook(
+            [Service] IBookService service,
             string title, 
             int authorId, 
             int categoryId, 
@@ -23,13 +26,9 @@ namespace GraphQLAgentApp.Api.GraphQL
             return mappingService.Map<BookGraphQLModel>(bookDto);
         }
 
-        public async Task<UserGraphQLModel?> Login(string username, string password)
-        {
-            var userDto = await userService.AuthenticateAsync(username, password);
-            return userDto != null ? mappingService.Map<UserGraphQLModel>(userDto) : null;
-        }
-
         public async Task<UserGraphQLModel> Register(
+            [Service] IUserService userService,
+            [Service] IUserProfileRepository userProfileRepository,
             string username, 
             string email, 
             string password, 
@@ -56,9 +55,11 @@ namespace GraphQLAgentApp.Api.GraphQL
                 CreatedAt = DateTime.UtcNow
             };
             
-            // Note: We'll need to inject IUserProfileRepository to create the profile
-            // For now, we'll return the user without profile
-            return mappingService.Map<UserGraphQLModel>(createdUser);
+            var createdProfile = await userProfileRepository.CreateAsync(userProfileDto);
+            
+            // Get the complete user with profile
+            var completeUser = await userService.GetByIdAsync(createdUser.Id);
+            return mappingService.Map<UserGraphQLModel>(completeUser);
         }
     }
 }

@@ -89,6 +89,26 @@ namespace GraphQLAgentApp.Service
             return null;
         }
 
+        public async Task<bool> LogoutAsync(int userId)
+        {
+            try
+            {
+                var user = await _userRepository.GetByIdAsync(userId);
+                if (user != null)
+                {
+                    // Update last logout time
+                    user.LastLogoutAt = DateTime.UtcNow;
+                    await _userRepository.UpdateAsync(user);
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())

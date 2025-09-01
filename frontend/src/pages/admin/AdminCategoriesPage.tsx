@@ -10,9 +10,11 @@ import {
   ListItemText,
   Divider,
   Avatar,
-  Chip
+  Chip,
+  Button
 } from '@mui/material'
-import { Category } from '@mui/icons-material'
+import { Category, ArrowBack } from '@mui/icons-material'
+import { Link } from 'react-router-dom'
 
 const GET_CATEGORIES = gql`
   query GetCategories {
@@ -25,9 +27,19 @@ export function AdminCategoriesPage() {
   
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Manage Categories
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+        <Typography variant="h4" component="h1">
+          Manage Categories
+        </Typography>
+        <Button
+          component={Link}
+          to="/admin"
+          variant="outlined"
+          startIcon={<ArrowBack />}
+        >
+          Back to Dashboard
+        </Button>
+      </Box>
       
       <Paper sx={{ p: 3 }}>
         <Typography variant="h6" gutterBottom>

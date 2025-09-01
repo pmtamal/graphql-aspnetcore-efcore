@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client'
+import { gql, useLazyQuery } from '@apollo/client'
 import { 
   Box, 
   Button, 
@@ -10,11 +10,11 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const LOGIN = gql`
-  mutation Login($username: String!, $password: String!) {
+  query Login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
       id
       username
@@ -52,11 +52,19 @@ export function LoginPage() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const navigate = useNavigate()
   
-  const [login, { loading, error }] = useMutation(LOGIN)
+  const [login, { loading, error }] = useLazyQuery(LOGIN)
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   })
+
+  // Reset form data when component mounts (after logout)
+  useEffect(() => {
+    setFormData({
+      username: '',
+      password: ''
+    })
+  }, [])
 
   const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [field]: e.target.value }))
@@ -80,7 +88,7 @@ export function LoginPage() {
         
         // Redirect based on user role
         if (user.isAdmin) {
-          navigate('/admin/books')
+          navigate('/admin')
         } else {
           navigate('/catalog')
         }

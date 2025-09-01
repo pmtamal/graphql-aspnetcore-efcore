@@ -27,6 +27,8 @@ namespace GraphQLAgentApp.Models.Entities
         
         public DateTime? LastLoginAt { get; set; }
         
+        public DateTime? LastLogoutAt { get; set; }
+        
         // Navigation properties
         public virtual UserProfile? Profile { get; set; }
         public virtual List<Order> Orders { get; set; } = new List<Order>();

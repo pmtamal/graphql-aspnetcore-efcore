@@ -1,8 +1,10 @@
-import { AppBar, Toolbar, Typography, Button, Container, Box, IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery } from '@mui/material'
-import { Menu, Logout } from '@mui/icons-material'
+import { AppBar, Toolbar, Typography, Button, Container, Box, IconButton, Drawer, List, ListItem, ListItemText, useTheme, useMediaQuery, Menu, MenuItem, Avatar, Divider } from '@mui/material'
+import { Menu as MenuIcon, Logout, Person, AdminPanelSettings } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 import { Link, Route, Routes, useNavigate } from 'react-router-dom'
-import { CatalogPage } from './pages/CatalogPage'
+import { useApolloClient } from '@apollo/client'
+import { logout } from './utils/auth'
+import { CustomerDashboard } from './pages/CustomerDashboard'
 import { BookDetailsPage } from './pages/BookDetailsPage'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
@@ -49,8 +51,10 @@ function Navbar() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [profileMenuAnchor, setProfileMenuAnchor] = useState<null | HTMLElement>(null)
   const [user, setUser] = useState<User | null>(null)
   const navigate = useNavigate()
+  const client = useApolloClient()
 
   useEffect(() => {
     const userStr = localStorage.getItem('user')
@@ -65,19 +69,22 @@ function Navbar() {
   }, [])
 
   const handleLogout = () => {
-    localStorage.removeItem('user')
-    setUser(null)
-    navigate('/login')
+    logout(client, navigate)
+    setProfileMenuAnchor(null)
+  }
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setProfileMenuAnchor(event.currentTarget)
+  }
+
+  const handleProfileMenuClose = () => {
+    setProfileMenuAnchor(null)
   }
 
   const navItems = [
-    { text: 'Catalog', path: '/catalog' },
-    { text: 'Cart', path: '/cart' },
+    { text: 'Book Catalog', path: '/catalog' },
     ...(user?.isAdmin ? [
-      { text: 'Admin', path: '/admin' },
-      { text: 'Manage Books', path: '/admin/books' },
-      { text: 'Manage Authors', path: '/admin/authors' },
-      { text: 'Manage Categories', path: '/admin/categories' }
+      { text: 'Admin Dashboard', path: '/admin' }
     ] : []),
     ...(user ? [] : [
       { text: 'Login', path: '/login' },
@@ -107,9 +114,26 @@ function Navbar() {
           </ListItem>
         ))}
         {user && (
-          <ListItem onClick={handleLogout}>
-            <ListItemText primary="Logout" />
-          </ListItem>
+          <>
+            <Divider sx={{ my: 1 }} />
+            <ListItem>
+              <ListItemText 
+                primary={user.profile?.firstName || user.username}
+                secondary={user.email}
+              />
+            </ListItem>
+            {user.isAdmin && (
+              <ListItem>
+                <ListItemText 
+                  primary="Administrator"
+                  primaryTypographyProps={{ color: 'primary' }}
+                />
+              </ListItem>
+            )}
+            <ListItem onClick={handleLogout}>
+              <ListItemText primary="Logout" />
+            </ListItem>
+          </>
         )}
       </List>
     </Box>
@@ -133,19 +157,6 @@ function Navbar() {
             BookStore
           </Typography>
           
-          {user && (
-            <Typography 
-              variant="body2" 
-              sx={{ 
-                mr: 2,
-                display: { xs: 'none', sm: 'block' }
-              }}
-            >
-              Welcome, {user.profile?.firstName || user.username}
-              {user.isAdmin && ' (Admin)'}
-            </Typography>
-          )}
-          
           {isMobile ? (
             <IconButton
               color="inherit"
@@ -153,7 +164,7 @@ function Navbar() {
               edge="start"
               onClick={handleDrawerToggle}
             >
-              <Menu />
+              <MenuIcon />
             </IconButton>
           ) : (
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
@@ -172,22 +183,83 @@ function Navbar() {
                 </Button>
               ))}
               {user && (
-                <Button
+                <IconButton
                   color="inherit"
-                  onClick={handleLogout}
-                  startIcon={<Logout />}
-                  sx={{ 
-                    fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                    px: { xs: 1, sm: 2 }
-                  }}
+                  onClick={handleProfileMenuOpen}
+                  sx={{ ml: 1 }}
                 >
-                  Logout
-                </Button>
+                  <Avatar 
+                    sx={{ 
+                      width: 32, 
+                      height: 32, 
+                      bgcolor: 'primary.main',
+                      fontSize: '0.875rem'
+                    }}
+                  >
+                    {user.profile?.firstName?.charAt(0) || user.username.charAt(0).toUpperCase()}
+                  </Avatar>
+                </IconButton>
               )}
             </Box>
           )}
         </Toolbar>
       </AppBar>
+
+      {/* Profile Menu */}
+      <Menu
+        anchorEl={profileMenuAnchor}
+        open={Boolean(profileMenuAnchor)}
+        onClose={handleProfileMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        PaperProps={{
+          sx: {
+            mt: 1,
+            minWidth: 200,
+          }
+        }}
+      >
+        {user && (
+          <>
+            <MenuItem disabled sx={{ opacity: 0.7 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Person fontSize="small" />
+                <Box>
+                  <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                    {user.profile?.firstName || user.username}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {user.email}
+                  </Typography>
+                </Box>
+              </Box>
+            </MenuItem>
+            {user.isAdmin && (
+              <MenuItem disabled sx={{ opacity: 0.7 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <AdminPanelSettings fontSize="small" color="primary" />
+                  <Typography variant="body2" color="primary">
+                    Administrator
+                  </Typography>
+                </Box>
+              </MenuItem>
+            )}
+            <Divider />
+            <MenuItem onClick={handleLogout}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Logout fontSize="small" />
+                <Typography>Logout</Typography>
+              </Box>
+            </MenuItem>
+          </>
+        )}
+      </Menu>
       
       <Drawer
         variant="temporary"
@@ -228,8 +300,8 @@ export default function App() {
         }}
       >
         <Routes>
-          <Route path="/" element={<CatalogPage />} />
-          <Route path="/catalog" element={<CatalogPage />} />
+          <Route path="/" element={<CustomerDashboard />} />
+          <Route path="/catalog" element={<CustomerDashboard />} />
           <Route path="/book/:id" element={<BookDetailsPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
